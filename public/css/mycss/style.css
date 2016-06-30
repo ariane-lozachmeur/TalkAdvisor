@@ -1,0 +1,222 @@
+@CHARSET "ISO-8859-1";
+
+body{
+	background-color: #edefed; 
+	font-family: Tahoma,Arial,sans-serif;
+	font-size:14px;
+	
+}
+
+@font-face{
+	font-family:"Font Quote";
+	src:url("../../fonts/BoP.ttf");
+}
+.cardbg {
+   background:url('../../images/fond2.jpg') no-repeat 0% 0%; width:100%; height:auto;
+   background-size:cover;
+}
+
+.container-fluid{
+	max-width:1400px;
+	margin:auto;
+}
+
+.no-max-width{
+	max-width:10000000px;
+}
+
+.margin{
+	margin-left:120px;
+	margin-right:120px;
+}
+
+.margin-top{
+	margin-top:50px;
+}
+
+.button-perso:focus{
+	border-color:#0aa516;
+}
+
+.sticker{
+	background-color:#0aa516;
+	color:#fff;
+	text-align:center;
+	border: 4px solid #fff;
+	border-radius:6px;
+	padding:2px;
+	width : 25%; 
+	margin : auto; 
+}
+
+.presentation{
+	height:150px;
+	width:100%;
+	overflow:auto;
+	text-align:justify; 
+	text-justify:newspaper;
+	overflow:auto;
+	margin-top:15px;
+	font:15px/26px Arial, sans serif;
+	border:1px solid #fff;
+	
+}
+
+.firstBloc{
+	margin-top:80px; 
+	border-bottom:10px solid #edefed;
+	display:flex;
+	flex-wrap:wrap;
+	justify-content: center;
+	align-item:center;
+	align-content:center;
+	
+}
+
+.bloc{
+
+	margin-top:20px; 
+	background-color: #fff; 
+	border-bottom:10px solid #edefed";
+}
+
+.smallBloc{
+	margin-top:20px; 
+	background-color: #fff; 
+	border-bottom:10px solid #edefed";
+	border-right:100px solid #edefed";
+	display:flex;
+}
+
+.left{
+	border-right:10px solid #edefed;
+}
+
+.right{
+	border-left:10px solid #edefed;
+}
+
+.column{
+	 display:flex;
+	 flex-direction: column;
+	 margin:0px;
+	 padding:0px;
+	 align-item:stretch;
+	 align-content:stretch;
+	 height:100%;
+}
+
+.blocVideo{
+	border-right:10px solid #edefed; 
+	background:#edefed;
+	@media screen and (min-width: 768px){
+	margin-left:-15px
+	}
+}
+
+.source{
+	font-style:italic;
+	text-align:right;
+}
+
+.h1, .h2, .h3, .h4{
+	color : #0aa516;
+}
+
+.center-text{
+  height: 40px; /* hauteur du parent */
+  line-height: 40px; /* hauteur de ligne (identique) */
+  white-space: nowrap; /* interdiction de passer à la ligne */
+  border-bottom : 1px solid #b8c0b8;
+}
+
+
+.speakerPhoto{
+	height : auto;
+}
+
+.review-container{
+	display:flex;
+	flex-direction:row;
+	justify-content:center;
+}
+
+.review-text{
+	border-bottom:1px solid #d6dbd6;
+	display:flex; 
+	flex-direction:column;
+	align-self: flex-end; 
+}
+
+.review-picture{
+	padding:20px;
+	display:flex;
+	flex-direction:column;
+	justify-items:center;
+	align-items:center;
+}
+
+.user-name{
+	margin-top: 10px;
+}
+
+.quote-container{
+	background-image: url('http://localhost/laravel5/public/images/quote.png');
+	background-repeat: no-repeat;
+    background-size: cover;
+	padding-top:50px;
+	padding-bottom:50px;
+}
+
+.quote{
+	font-family:Font Quote;
+	font-size:35px;
+	color:white;
+	text-shadow: 1px 1px #000000;
+	text-align:center;
+	
+}
+
+.img-container{
+	margin-top:30px;
+	display:flex;
+	justify-content:flex-end;
+	padding-right:0px;
+}
+
+.img-border{
+	border:1px solid #c3bbc3;
+}
+
+.img-circle {
+    border-radius: 50%;
+}
+.img-circle {
+    border-radius: 0;
+}
+
+.ratio {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    height: 0;
+    padding-bottom: 100%;
+    position: relative;
+    width: 100%;
+}
+.img-circle {
+    border-radius: 50%;
+}
+.img-responsive {
+    display: block;
+    height: auto;
+    max-width: 100%;
+}
+
+.star-container{
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+}
+
