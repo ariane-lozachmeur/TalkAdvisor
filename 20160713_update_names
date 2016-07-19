@@ -1,0 +1,8 @@
+INSERT INTO `review_options` (`id`, `name`, `created_at`, `updated_at`, `description`) VALUES ('1', '總和評分', '2016-07-13 00:00:00', '2016-07-13 00:00:00', '滿意度的指標，觀眾有沒有得到、聽到、學到想要得到、聽到、學到的東西'), ('2', '內容', '2016-07-13 00:00:00', '2016-07-13 00:00:00', '與預告講題的相關度、適合本場演講的觀眾等等'), ('3', '容易懂', '2016-07-13 00:00:00', '2016-07-13 00:00:00', '調理清晰，講話速度恰當，舉例子，好的視覺支援 等等'), ('4', '啓發性', '2016-07-13 00:00:00', '2016-07-13 00:00:00', '讓人有新的想法、聯想到自己事業或人生等等'), ('5', '讓人投入', '2016-07-13 00:00:00', '2016-07-13 00:00:00', '帶動氣氛的能力，讓人專注於講師，包含講師講笑話、感人故事等等');
+
+RENAME TABLE `review_options` TO `ratingoptions`;
+RENAME TABLE `review_review_option` TO `review_ratingoption`;
+
+ALTER TABLE `review_ratingoption` CHANGE COLUMN `review_option_id` TO `ratingoption_id`;
+ALTER TABLE `review_ratingoption` CHANGE COLUMN `score_id` TO `score`;
+

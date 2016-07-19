@@ -1,287 +1,202 @@
-@extends('template') 
+@extends('template') @section('title') {{$speaker->speaker_name}} -
+TalkAdvisor @stop @section('content')
 
-@section('title') 
-
-{{$speaker->speaker_name}} - TalkAdvisor
-
-@stop
-
-@section('content')
+		@if ($speaker->number_reviews===null)
+			<div class="alert alert-perso alert-info alert-success alert-important">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+				</button>
+				This speaker has no review yet. Be the first to grade him or her!
+			</div>
+		@endif
 
 <div class="container-fluid">
-   <div class="margin">
-	<div class="row firstBloc">
-		<div class="col-lg-12" style="padding-bottom:40px; background: #fff">
-			<div class="col-lg-2 col-lg-offset-1 img-container">
-				<div class="ratio img-circle img-responsive img-border" style="background-image:url('{{$speaker->speaker_photo}}')" alt="TalkAdvisor"></div>
+	<div class="margin">
+	
+		<div class="row firstBloc">
+			<div class="col-md-4">
+				<h1 class="center ">{{$speaker->speaker_name}}</h1>
+				<h4 class="center">{{$speaker->speaker_englishname}}</h4>
+				<div class="star-container star-container-margin">
+					<input id="overall-notation" name="overall-notation"
+						class="{{$speaker->number_reviews===null ? 'kv-ltr-theme-svg-star-disabled' : 'kv-ltr-theme-svg-star-display'}} rating-loading"
+						value="{{$speaker->average_1}}">
+				
+					<!-- Button to pop the modal. See at the end for the modal -->
+					<button type="button" class="btn btn-default btn-margin"
+						data-toggle="modal" data-target="#myModal">Rate this speaker</button>
+						
+				</div>
 			</div>
-			<div class="col-lg-9">
-			<h1 style="text-align: center">{{$speaker->speaker_name}}</h1>
-			<h4 style="text-align:center">{{$speaker->speaker_englishname}}</h4>
-			<div class="star-container">
-				<input id="overall-notation" name="overall-notation"
-					class="kv-ltr-theme-svg-star-display rating-loading" value="{{$speaker->average_5}}" dir="ltr"
-					data-size="xs">
-				<!-- Button to pop the modal. See at the end for the modal -->
-				<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
-  					Rate this speaker
-				</button>
-			</div>
-			<div class="col-lg-10 col-lg-offset-1" style="margin-top: 15px">
-				<div class="col-lg-3 col-xs-4 sticker">Biotechnologies</div>
-				<div class="col-lg-3 col-xs-4 sticker">Arts</div>
-				<div class="col-lg-3 col-xs-4 sticker">Informatique</div>
-				<div class="col-lg-3 col-xs-4 sticker">Genetique</div>
-				<div class="col-lg-3 col-xs-4 sticker">Chirurgie</div>
-			</div>
-			</div>
-			<div class="col-lg-10 col-lg-offset-1">
-				<div class="presentation">
-					{{$speaker->speaker_description}}
 
-					
+			<div class="col-md-2 col-md-offset-1 col-sm-4 img-container">
+				<div class="ratio img-circle img-responsive"
+					style="background-image: url('{{$speaker->speaker_photo}}')"></div>
+			</div>
+
+			<div class="col-md-4 col-md-offset-1">
+				<div class="presentation">
+					{{$speaker->speaker_description}} <a class="more"
+						data-toggle="modal" data-target="#modalPresentation">Read more</a>
 					<p class="source">Source : Agence FrancePresse</p>
 				</div>
 			</div>
 		</div>
-		
-				
-	</div>
 
-	<div class="row bloc">
-		<div class="col-lg-12 quote-container">
-			<div class="quote">
-				<p id="quote"> We know what we are, but know not what may be </p>
-				 William Shakespeare </p>
-				<p><span id="quote-left" class="glyphicon glyphicon-chevron-left"></span>
-				<span id="quote-right" class="glyphicon glyphicon-chevron-right"></span></p>
-			</div>
+		@unless ($quotes->isEmpty())
+			@include('partials.showQuote')
+		@endunless
+		
+		<div class="row secondBloc">
 			
-		</div>
-	
-	<!--  	<div class="col-lg-2"></div>
-		<div class="col-xs-10 col-xs-offset-1 col-lg-8 " id="slider-wrapper">
-			<div
-				class="col-lg-offset-2 col-xs-10 col-xs-offset-1 col-lg-8 inner-wrapper "
-				style="margin-top: 20px">
-				<input checked type="radio" name="slide" class="control" id="Slide1" />
-				<label for="Slide1" id="s1"></label> <input type="radio"
-					name="slide" class="control" id="Slide2" /> <label for="Slide2"
-					id="s2"></label> <input type="radio" name="slide" class="control"
-					id="Slide3" /> <label for="Slide3" id="s3"></label>
-				<div class="overflow-wrapper">
-					<div class="slide">
-						<p>"We know what we are, but know not what may be"</p>
-					</div>
-					<div class="slide">
-						<p>"Better three hours to soon than three minutes too late"</p>
-					</div>
-					<div class="slide">
-						<p>"It is not in the stars to hold our destiny but in ourselves"</p>
-					</div>
+			@unless ($speaker->video===null)
+			<div class="col-md-6 col-sm-12 blocVideo">
+				<div class="embed-responsive embed-responsive-16by9">
+					<iframe width="560" height="315" src="{{$speaker->video}}"
+						allowfullscreen></iframe>
 				</div>
 			</div>
-		</div> -->
-	</div>
-
-	<div class="row bloc">
-		<div class="col-lg-6 col-xs-10 blocVideo">
-			<div class="embed-responsive embed-responsive-16by9">
-				<iframe width="560" height="315"
-					src="{{$speaker->video}}" allowfullscreen></iframe>
+			@else
+			<div class="col-md-6 col-sm-12 bloc">
+				<div class="video-form-container">
+				{{ Form::open() }}    			
+					<div class="col-lg-10">               
+	    				{{ Form::label('video','Upload a video of this speaker !',array('class'=>'video-label'))}} 
+	    			</div>
+					<div class="col-lg-10">               
+	    				{{ Form::text('video',null,array('class'=>'form-control','placeholder'=>'Example : https://www.youtube.com/watch?v=HUmX6CiMoFk'))}}  
+	    			</div>
+	    			<div class="col-lg-2">
+	    				{{ Form::submit('Upload', array('class'=>'btn btn-primary')) }}
+	    			</div>
+				{{ Form::close() }}	
+				</div>
 			</div>
-		</div>
+			@endunless
 
-		<div class="col-lg-6 col-md-9 col-xs-10">
-			<h3>Ratings :</h3>
-			
-			<!--  TODO
-			<?php  $i=1; ?>
+			<div class="col-md-6 col-sm-12 bloc ratings-bloc">
+			<?php   $i=1; ?>
 			@foreach ($options as $option)
-			<div class="col-lg-6 center-text">
+			<div class="col-md-2 col-sm-2 center-text">
 				<h5>{{$option->name}}</h5>
 			</div>
-			<div class="col-lg-6 center-text">
-				<input	class="kv-ltr-theme-svg-star-display rating-loading" value="{{$speaker->average_1}}" dir="ltr" data-size="xs">
+			<div class="col-md-4 col-sm-4 center-text">
+				<span class="glyphicon glyphicon-info-sign info" data-container="body" data-toggle="tooltip" data-placement="right" title="{{$option->description}}"></span>
 			</div>
-			<?php $i++; ?>			
+				<div class="col-md-6 col-sm-6 center-text">
+				
+					<input id="option{{$i}}"
+						class="{{$speaker->number_reviews===null ? 'kv-ltr-theme-svg-star-disabled' : 'kv-ltr-theme-svg-star-display'}} rating-loading " value="2">
+				</div>
+			<?php  $i++; ?>			
 			@endforeach
-			-->
-			
-			<div class="col-lg-6 center-text">
-				<h5>Overall</h5>
-			</div>
-			<div class="col-lg-6 center-text">
-				<input id="display-1" name="display-1"
-					class="kv-ltr-theme-svg-star-display rating-loading" value="{{$speaker->average_5}}" dir="ltr"
-					data-size="xs">
-			</div>
-			<div class="col-lg-6 center-text">
-				<h5>Content</h5>
-			</div>
-			<div class="col-lg-6 center-text">
-				<input id="display-2" name="display-2"
-					class="kv-ltr-theme-svg-star-display rating-loading" value="{{$speaker->average_1}}" dir="ltr"
-					data-size="xs">
-			</div>
-			<div class="col-lg-6 center-text">
-				<h5>Easy to understand</h5>
-			</div>
-			<div class="col-lg-6 center-text">
-				<input id="display-3" name="display-3"
-					class="kv-ltr-theme-svg-star-display rating-loading" value="{{$speaker->average_2}}" dir="ltr"
-					data-size="xs">
-			</div>
-			<div class="col-lg-6 center-text">
-				<h5>Captivating</h5>
-			</div>
-			<div class="col-lg-6 center-text">
-				<input id="display-4" name="display-4"
-					class="kv-ltr-theme-svg-star-display rating-loading" value="{{$speaker->average_3}}" dir="ltr"
-					data-size="xs">
-			</div>
-			<div class="col-lg-6 center-text">
-				<h5>Inspiring</h5>
-			</div>
-			<div class="col-lg-6 center-text">
-				<input id="display-5" name="display-5"
-					class="kv-ltr-theme-svg-star-display rating-loading" value="{{$speaker->average_4}}" dir="ltr"
-					data-size="xs">
 			</div>
 		</div>
+		
+		@unless($commentReviews->isEmpty())
+		<div class="row bloc">
+			@include('partials.showReviews')
+		</div>
+		@endunless
+
 	</div>
-	
-	<div class="row bloc">
-		<div class="col-lg-10">
-			@foreach ($reviews as $review)
-				<div class ="row review-container">
-					<div class="col-lg-3 review-picture"> <!-- photo of the user -->
-						<img class="img-responsive img-circle" src="https://a2.muscache.com/im/pictures/775bef1f-405a-4dfc-8bef-2f0edf427610.jpg?aki_policy=profile_x_medium" alt="user" style="width:50%">	
-						<p class="user-name">{{ $review->user_name }}</p>
-					</div>
-					<div class="col-lg-9 review-text">
-					<p>{{ $review->comment }}</p>
-					<p> {{ $review->created_at }}</p>
-					</div>
-					
-				</div>
-			@endforeach
+</div>
+
+<!-- Modal for the presentation -->
+<div class="modal fade" id="modalPresentation" tabindex="-1"
+	role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel">{{$speaker->speaker_name}}</h4>
+			</div>
+			<div class="modal-body">{{$speaker->speaker_description}}</div>
+			<div class="modal-footer"></div>
 		</div>
 	</div>
-  </div>
 </div>
 
-
-
-<!-- Modal for the ratings -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Rate {{$speaker->speaker_name}}</h4>
-      </div>
-      <div class="modal-body">
-        	<div class="row"">
-		        <div class="col-lg-6 star-container">
-					<p>Content</p>
-					<input id="input-content" name="input-content"
-						class="kv-ltr-theme-svg-star rating-loading" value= "2" dir="ltr"
-						data-size="xs">
-				</div>
-				<div class="col-lg-6">
-					<p>Easy to understand</p>
-					<input id="input-underst" name="input-underst"
-						class="kv-ltr-theme-svg-star rating-loading" value="2" dir="ltr"
-						data-size="xs">
-				</div>
-				<div class="col-lg-6">
-					<p>Captivating</p>
-					<input id="input-captiv" name="input-captiv"
-						class="kv-ltr-theme-svg-star rating-loading" value="2" dir="ltr"
-						data-size="xs">
-				</div>
-				<div class="col-lg-6">
-					<p>Inspiring</p>
-					<input id="input-insp" name="input-insp"
-						class="kv-ltr-theme-svg-star rating-loading" value="2" dir="ltr"
-						data-size="xs">
-				</div>
-				<div class="col-lg-6 col-lg-offset-3">
-					<p>Overall</p>
-					<input id="input-overall" name="input-overall"
-						class="kv-ltr-theme-svg-star rating-loading" value="2" dir="ltr"
-						data-size="xs">
-				</div></div>
-			</div>
-			<div class="row">
-			{!! Form::open(); !!}
-			<!-- This div contains the grades given with the stars. They are updated with a script -->
-				<div style="display:none">
-					{!! Form::label('1') !!} 
-					{!! Form::number('1',2,array('id'=>'grade-content')); !!}
-					{!! Form::label('2') !!} 
-					{!! Form::number('2',2,array('id'=>'grade-underst')); !!}
-					{!! Form::label('3') !!} 
-					{!! Form::number('3',2,array('id'=>'grade-captiv')); !!}
-					{!! Form::label('4') !!} 
-					{!! Form::number('4',2,array('id'=>'grade-insp')); !!}
-					{!! Form::label('5') !!} 
-					{!! Form::number('5',2,array('id'=>'grade-overall')); !!}
-					{!! Form::label('id') !!} 
-					{!! Form::text('id', $speaker->id ,array('id'=>'id')); !!}
-				</div>
-				<div class="col-lg-10 col-lg-offset-1 form-group" id='before-that'>
-					{!! Form::label('body', 'Your comment :') !!} 
-					{!! Form::textarea('body', null , array('class' => 'form-control', 'placeholder'=>'一個好的評論，應該能夠讓人做為是否參加同一個講者未來的演講的參考。因此這個評論應該著重於同一個講者不同場演講的共通點。首要的評分關鍵是講者能夠選取適合觀眾、演講長度、公告的主題的題材的能力。更為重要的是講者在傳達時，是否有能力以清晰、有啟發性且吸引人的方式表達。如果你還是不太知道該如何撰寫你的評論，可以嘗試先以文字敘述你以上填寫評分的原因。')); !!}
-					{!! $errors->first('body', '<small class="help-block">:message</small>') !!}
-				</div>
-				<div class="col-lg-10 col-lg-offset-1 form-group">
-					{!! Form::label('quote', 'A quote from the speach :') !!} 
-					{!! Form::text('quote', null , array('class' => 'form-control')); !!}
-					{!! $errors->first('quote', '<small class="help-block">:message</small>') !!}
-				</div>
-				<div class="col-lg-10 col-lg-offset-1 form-group">
-				{!! Form::submit('Submit',array('class' => 'btn btn-primary btn col-lg-offset-10')); !!}
-				</div>
-				
-				
-			{!!Form::close(); !!}
-			</div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
+<!-- Modal used to rate -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			@include('partials.ratingForm');	
+		</div>
+	</div>
 </div>
+<!-- End of the modal -->
+
+@stop @section ('script') {{ Html::script('js/quote.js') }}
+
+<script>
+
+var commentReviews = {!!json_encode($commentReviews)!!};
+var quotes = {!! json_encode($quotes)!!};
+var ratings= {!! json_encode($ratings) !!};
+var speaker = {!!json_encode($speaker)!!};
+
+$("#grades").click(function(){
+	$("#stars").hide();
+	$("#text-fields").show();
+});
+
+$("#show-grades").click(function(){
+	$("#stars").show();
+	$("#text-fields").hide();
+});
+
+// TODO : this is supposed to allow to change the grades. But it closes the modal for some reason
+/* $("#show-grades").click(function(){
+	$("#stars").show();
+	$("#text-fields").hide();
+}); */
+
+// TODO :  Infinite scroll plugin. It works, we just have to find a way to load the newReviews 
+// and ratings to show the read more and the grades.
+/* $('#reviews').infinitescroll({
+
+	 navSelector  : "ul.pagination",            
+	                // selector for the paged navigation (it will be hidden)
+	 nextSelector : "ul.pagination li a",    
+	                // selector for the NEXT link (to page 2)
+	 itemSelector : "#reviews div.review-container"  ,        
+	                // selector for all items you'll retrieve
+	 loadingText  : "Loading new reviews...", 
+	 donetext     : "You have seen all the reviews on this speaker" ,
+}); */
 
 	
-	@stop 
-	
-	@section ('script')
-
-	<script>
-	var i=1;
 $(document).on('ready', function(){
+
+	// initialize the tooltips 
+	$('[data-toggle="tooltip"]').tooltip()
+
+	//setting up the good value for the stars on the main page
+    $("#option1").val(speaker.average_1);
+    $("#option2").val(speaker.average_2);
+    $("#option3").val(speaker.average_3);
+    $("#option4").val(speaker.average_4);
+    $("#option5").val(speaker.average_5);
+
+  //initialise the stars of the main page
     $('.kv-ltr-theme-svg-star-display').rating({
-    	hoverOnClear: false,
     	min: 0, max: 5, step: 0.5, stars: 5,
         theme: 'krajee-svg',
-        starCaptions: {1: 'Very Poor', 2: 'Poor', 3: 'Ok', 4: 'Good', 5: 'Very Good'},
         filledStar: '<span class="krajee-icon krajee-icon-star"></span>',
         emptyStar: '<span class="krajee-icon krajee-icon-star"></span>',
-        showClear: false,
-        showCaption: false,
         displayOnly:true,
         size:'xs'
     });
-
+    	
+	//initialise the stars used to grade
     $('.kv-ltr-theme-svg-star').rating({
-    	hoverOnClear: false,
     	min: 0, max: 5, step: 0.5, stars: 5,
         theme: 'krajee-svg',
-        starCaptions: {1: 'Very Poor', 2: 'Poor', 3: 'Ok', 4: 'Good', 5: 'Very Good'},
         filledStar: '<span class="krajee-icon krajee-icon-star"></span>',
         emptyStar: '<span class="krajee-icon krajee-icon-star"></span>',
         showClear: false,
@@ -289,35 +204,42 @@ $(document).on('ready', function(){
         size:'xs'
     });
 
-    $("#input-content").rating().on("rating.change", function(event, value, caption) {   
-	   $("#grade-content").val(value); 
-    }); 
-
-    $("#input-underst").rating().on("rating.change", function(event, value, caption) {   
- 	   $("#grade-underst").val(value); 
-     }); 
-
-    $("#input-captiv").rating().on("rating.change", function(event, value, caption) { 
-       $("#grade-captiv").val(value); 
-     }); 
-
-    $("#input-insp").rating().on("rating.change", function(event, value, caption) {  
- 	   $("#grade-insp").val(value); 
-     }); 
-
-    $("#input-overall").rating().on("rating.change", function(event, value, caption) {  
- 	   $("#grade-overall").val(value); 
-     });
+	//initialise the disabled stars (when there is no reviews yet)
+    $('.kv-ltr-theme-svg-star-disabled').rating({
+	    theme: 'krajee-svg',
+	    filledStar: '<span class="krajee-icon krajee-icon-star"></span>',
+	    emptyStar: '<span class="krajee-icon krajee-icon-star disabled-stars"></span>',
+	  	displayOnly:true,
+	    size:'xs'
+	  });
     
-    $("#quote-right").click(function(){
-   	 //$("#quote").html('{{$reviews->get(1)->quote}}');
-   	console.log( "{{ $reviews->get(1)->quote }}");
-	i++;   	
-    });
-        
-    });
+	// Updates the value of the fields "grades" of the form when stars are clicked
+	$("#input1").rating().on("rating.change", function(event, value, caption) {  
+		$("#1").val(value); 
+	}); 
+
+    $("#input2").rating().on("rating.change", function(event, value, caption) {   
+ 	   $("#2").val(value); 
+     }); 
+
+    $("#input3").rating().on("rating.change", function(event, value, caption) { 
+       $("#3").val(value); 
+     }); 
+
+    $("#input4").rating().on("rating.change", function(event, value, caption) {  
+ 	   $("#4").val(value); 
+     }); 
+
+    $("#input5").rating().on("rating.change", function(event, value, caption) {  
+ 	   $("#5").val(value); 
+     });
+
+});
 
 </script>
 
+{{Html::script('js/read_more.js')}}
+{{Html::script('js/quote-carousel.js')}}
+{{Html::script('js/stars.js')}}
 
-	@stop
+@stop

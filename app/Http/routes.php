@@ -11,10 +11,21 @@
 |
 */
 
+Route::controllers([
+	'auth'=>'Auth\AuthController',
+	'password'=>'Auth\PasswordController'
+	]);
+
 Route::get('/', 'PagesController@home');
 
 Route::get('/{type}', 'PagesController@getPage');
 
 Route::get('/{type}/{id}', 'PagesController@getPage2');
 
-Route::post('/speaker/{id}', 'PagesController@postReview');
+
+Route::post('/search', 'FormController@search');
+
+Route::post('/{type}/{id}', 'FormController@postReview');
+
+Route::auth();
+

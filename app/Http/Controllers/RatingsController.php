@@ -6,61 +6,26 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Ratings;
+use App\Review;
 
 class RatingsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-         $ratings = Ratings::all();
-        return $ratings;
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
+   
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($input,$review_id)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        for ($i=1;$i<=5;$i++){
+    		$ratings = new Ratings;
+    		$ratings->review_id=$review_id;
+    		$ratings->ratingoption_id=$i;
+    		$ratings->score=$input[$i];
+    		$ratings->save();
+    	}
     }
 
     /**
@@ -72,7 +37,7 @@ class RatingsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // TODO
     }
 
     /**
@@ -83,6 +48,11 @@ class RatingsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // TODO
+    }
+    
+    public function getRatings($id){
+		$ratings = Review::find($id)->ratings()->get();
+		return $ratings;
     }
 }

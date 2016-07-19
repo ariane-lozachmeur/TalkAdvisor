@@ -25,10 +25,11 @@
 .navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>li>a:focus
 	{
 	color: #ffffff;
+	background-color: #077810
 }
 
 .navbar-default .navbar-nav>li>.dropdown-menu {
-	background-color: #0aa516;
+	background-color: #ffffff;
 }
 
 .navbar-default .navbar-nav>li>.dropdown-menu>li>a {

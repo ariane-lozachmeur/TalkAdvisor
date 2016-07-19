@@ -5,11 +5,21 @@ use Illuminate\Database\Migrations\Migration;
 
 class UpdateSpeakers2 extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+    /* 
+     * This one is needed to display the average of the speaker on its profile.
+     * 
+     * I asked you and Matthieu in Line how to do it a few days about.
+     * As I said it then, we have 2 different options : 
+     * 	
+     * 	1. We can calculate this average everytime someone loads the page. But it would take a lot of operations to do this.
+     *  2. We can add those fields which will keep those average in memory. Of course, everytime someone posts a new rating, they will be updated.
+     *  The variable number_reviews is needed to do that update. Indeed we have this formula :
+     *  
+     *  newAverage = ( number_reviews * oldAverage + score ) / ( number_reviews + 1 )
+     *  
+     *  Of course we could calculate number_review each time by counting the reviews, but it would take a lot of operations too.
+     * 
+     * */
   public function up()
     {
         Schema::table('speakers',function (Blueprint $table){

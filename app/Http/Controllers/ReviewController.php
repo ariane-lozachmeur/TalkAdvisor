@@ -9,144 +9,117 @@ use App\Speaker;
 use App\Http\Requests;
 use App\User;
 use App\Http\Controllers\SpeakerController;
+use App\Gestion\ReviewGestion;
+use App\Gestion\ReviewGestionInterface;
 
-
-class ReviewController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    
-    {
-        $reviews = Review::all();
-        return $reviews;
-        
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $review = Review::findOrFail($id);
-        
-        // TODO
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-    
-    public function getReview($id){					
-    	$reviews = Review::where('speaker_id',$id)->get();
-    	return $reviews;
-    }
-    
-    public static function getLast($number){
-    	$reviews=Review::orderBy('created_at','desc')->take($number)->get();
-    	return $reviews;
-    }
-    
-    public function postReview(){
-    	
-    	$input=Request::all();
-    	$review = new Review;
-    	$review->comment=$input['body'];
-    	$review->quote=$input['quote'];
-    	$review->talk_id=1; 							// TODO : To modify when we link talks to reviews
-    	$review->speaker_id=$input['id'];
-    	$review->user_email='ariane@gmail.com'; 		// TODO : it has to be the user's email !!
-    	$review->user_name = 'Ariane';
-    	$review->save();
-    
-    	// We need to know the id of the review we created :
-    	$latest = Review::orderBy('id','desc')->first();
-    	$id = $latest->id;
-    	
-    	$speaker= Speaker::find($input['id']);
-    	$number = $speaker->number_reviews;
-    	for ($i=1;$i<=5;$i++){
-    		$ratings = new Ratings;
-    		$ratings->review_id=$id;
-    		$ratings->rating_option_id=$i;
-    		$ratings->score=$input[$i];
-    		$ratings->save();
-    	}
-    	
-    	// updating the average
-    	$speaker->average_1 = ($number*$speaker->average_1 + $input[1])/($number+1);
-    	$speaker->average_2 = ($number*$speaker->average_2 + $input[2])/($number+1);
-    	$speaker->average_3 = ($number*$speaker->average_3 + $input[3])/($number+1);
-    	$speaker->average_4 = ($number*$speaker->average_4 + $input[4])/($number+1);
-    	$speaker->average_5 = ($number*$speaker->average_5 + $input[5])/($number+1);
-    	
-    	// updating the number of reviews
-    	$speaker->number_reviews++;
-    	$speaker->save();
+class ReviewController extends Controller {
+	protected $reviewRepository;
+	protected $reviewPerPage = 5;
 	
-    	/* $data=[];
-    	$data['speaker']=$speaker;
-    	$data['reviews']= ReviewController::getReview($id);
-    	
-    	return view('speakerProfile',$data); */
-   		$pagesController = new PagesController;
-    	return $pagesController->speakerProfile($input['id']);
-    }
+	/**
+	 * Show the form for creating a new resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function create() {
+		return view ( 'partials.ratingForm' );
+	}
+	
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param \Illuminate\Http\Request $request        	
+	 * @return \Illuminate\Http\Response
+	 */
+	public function store(Request $request, $speaker_id) {
+		$input = Request::all ();
+		
+		// Creating the review
+		$review = new Review ();
+		$review->comment = $input ['comment'];
+		$review->quote = $input ['quote'];
+		$review->talk_id = null; // TODO : To modify when we link talks to reviews
+		$review->speaker_id = $speaker_id;
+		$review->user_id = \Auth::id ();
+		$review->save ();
+		
+		// We need to know the id of the review we created :
+		$latest = Review::orderBy ( 'id', 'desc' )->first ();
+		$latest_id = $latest->id;
+		
+		// Now we can create the rating
+		$ratingController = new RatingsController ();
+		$ratingController->store ( $input, $latest_id );
+		
+		// updating the speaker
+		$speakerController = new SpeakerController ();
+		$speakerController->update ( $input, $speaker_id );
+		
+		\Session::flash ( 'flash_message', 'Your review has been posted succesfully' );
+		$pagesController = new PagesController ();
+		return $pagesController->getPage2 ( 'speaker', $speaker_id );
+	}
+	
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param int $id        	
+	 * @return \Illuminate\Http\Response
+	 */
+	public function edit($id) {
+		// TODO
+	}
+	
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param \Illuminate\Http\Request $request        	
+	 * @param int $id        	
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(Request $request, $id) {
+		// TODO
+	}
+	
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param int $id        	
+	 * @return \Illuminate\Http\Response
+	 */
+	public function destroy($id) {
+		// TODO
+	}
+	
+	// extracts the comment of the speaker for the reviews
+	public function getCommentOn($id) {
+		$reviews = Speaker::find ( $id )->reviews ()->where ( 'comment', '!=', "" )->latest ( 'created_at' )->paginate ( 3 );
+		return $reviews;
+	}
+	
+	// extracts the quotes of the speaker from the reviews
+	public function getQuoteOf($id) {
+		$quotes = Speaker::find ( $id )->reviews ()->where ( 'quote', '!=', "" )->latest ( 'created_at' )->lists ( 'quote' );
+		return $quotes;
+	}
+	
+	// return the $number last comment on the site
+	public static function getLastComments($n) {
+		$commentReviews = Review::where ( 'comment', '!=', "" )->latest ( 'created_at' )->paginate ( $n );
+		return $commentReviews;
+	}
+	
+	// return $n quotes chosen randomly. We turn the result in a plain array to simply the displaying of them
+	public function getRandomQuotes($n) {
+		$quotesRaw = Review::where ( 'quote', '!=', "" )->lists('quote','speaker_id')->random($n);
+		$quotes=[];
+		foreach($quotesRaw as $speaker_id=>$quote){
+			$speaker=Speaker::find($speaker_id);
+			$speaker_name=$speaker->speaker_name;
+			$speaker_photo=$speaker->speaker_photo;
+			$quotes[$speaker_id]=['quote'=>$quote,'id'=>$speaker_id,'name'=>$speaker_name,'photo'=>$speaker_photo];
+			
+		}
+		return $quotes;
+	}
 }

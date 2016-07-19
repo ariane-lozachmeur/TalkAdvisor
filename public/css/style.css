@@ -2,15 +2,12 @@
 
 body{
 	background-color: #edefed; 
-	font-family: Tahoma,Arial,sans-serif;
-	font-size:14px;
-	
+	font:16px Chinese, Arial ;
+	margin-bottom:30px;
 }
 
 @font-face{
-	font-family:"Font Quote";
-	src:url("../../fonts/BoP.ttf");
-}
+	   }
 .cardbg {
    background:url('../../images/fond2.jpg') no-repeat 0% 0%; width:100%; height:auto;
    background-size:cover;
@@ -50,63 +47,63 @@ body{
 }
 
 .presentation{
-	height:150px;
-	width:100%;
-	overflow:auto;
+	margin-top:30px;
 	text-align:justify; 
 	text-justify:newspaper;
-	overflow:auto;
-	margin-top:15px;
-	font:15px/26px Arial, sans serif;
-	border:1px solid #fff;
+	font:15px/26px;
+	max-height:150px;
+	padding:20px;
 	
 }
 
 .firstBloc{
-	margin-top:80px; 
-	border-bottom:10px solid #edefed;
 	display:flex;
 	flex-wrap:wrap;
 	justify-content: center;
 	align-item:center;
-	align-content:center;
-	
+	background: #fff;
+	margin-top:80px; 
+	padding-top:20px;
+	padding-bottom: 40px;
+	border:1px solid #E0E2E0;
+	border-bottom:1px solid #C7C9C7;
 }
 
 .bloc{
 
 	margin-top:20px; 
 	background-color: #fff; 
-	border-bottom:10px solid #edefed";
+	border:1px solid #E0E2E0;
+	border-bottom:1px solid #C7C9C7;
+	padding:30px;
 }
 
 .smallBloc{
 	margin-top:20px; 
 	background-color: #fff; 
-	border-bottom:10px solid #edefed";
-	border-right:100px solid #edefed";
+	border:1px solid #E0E2E0;
+	border-bottom:1px solid #C7C9C7;
 	display:flex;
 }
 
+.secondBloc{
+	display:flex;
+    flex-wrap: wrap;
+}
+	
+}
+
 .left{
-	border-right:10px solid #edefed;
+	border-right:10px solid #edefed
 }
 
 .right{
-	border-left:10px solid #edefed;
-}
-
-.column{
-	 display:flex;
-	 flex-direction: column;
-	 margin:0px;
-	 padding:0px;
-	 align-item:stretch;
-	 align-content:stretch;
-	 height:100%;
+	border-left:10px solid #edefed
 }
 
 .blocVideo{
+	margin-top:20px;
+	padding:0px;
 	border-right:10px solid #edefed; 
 	background:#edefed;
 	@media screen and (min-width: 768px){
@@ -114,22 +111,34 @@ body{
 	}
 }
 
+.ratings-bloc{
+	flex:1;
+	display:flex;
+	flex-wrap:wrap;
+}
+
+
 .source{
 	font-style:italic;
 	text-align:right;
-}
-
-.h1, .h2, .h3, .h4{
-	color : #0aa516;
 }
 
 .center-text{
   height: 40px; /* hauteur du parent */
   line-height: 40px; /* hauteur de ligne (identique) */
   white-space: nowrap; /* interdiction de passer à la ligne */
-  border-bottom : 1px solid #b8c0b8;
+  display:flex;
+ 
 }
 
+.center-text-small{
+  height: 20px; /* hauteur du parent */
+  line-height: 20px; /* hauteur de ligne (identique) */
+  white-space: nowrap; /* interdiction de passer à la ligne */
+  margin-top:4px;
+  margin-left:20%;
+  margin-right:-30%;
+}
 
 .speakerPhoto{
 	height : auto;
@@ -145,22 +154,42 @@ body{
 	border-bottom:1px solid #d6dbd6;
 	display:flex; 
 	flex-direction:column;
-	align-self: flex-end; 
+	justify-content:center;
+}
+
+.review-comment{
+	margin-bottom:10px;
+	text-align:justify;
+	max-height:80px;
 }
 
 .review-picture{
 	padding:20px;
 	display:flex;
 	flex-direction:column;
-	justify-items:center;
+	justify-content:center;
+	align-items:center;
+}
+
+.review-date{
+	text-align:right;
+	font-size:80%;
+	font-style:italic;
+}
+
+.review-button{
+	display:flex;
+	justify-content:center;
 	align-items:center;
 }
 
 .user-name{
 	margin-top: 10px;
+	
 }
 
 .quote-container{
+	margin-top:20px;
 	background-image: url('http://localhost/laravel5/public/images/quote.png');
 	background-repeat: no-repeat;
     background-size: cover;
@@ -178,14 +207,10 @@ body{
 }
 
 .img-container{
-	margin-top:30px;
+	margin-top:20px;
 	display:flex;
 	justify-content:flex-end;
 	padding-right:0px;
-}
-
-.img-border{
-	border:1px solid #c3bbc3;
 }
 
 .img-circle {
@@ -218,5 +243,76 @@ body{
 	display:flex;
 	flex-direction:column;
 	align-items:center;
+}
+
+.star-container-margin{
+	margin:15px;
+}
+
+.btn-margin{
+	margin-top:15px;
+	margin-bottom:-30px;
+}
+.right-align{
+	margin-left:75%;
+}
+
+.credit-container{
+	display:flex;
+	justify-content:center;
+	margin-top:30px;
+	color:white;
+	background:#0aa516;
+}
+
+.smaller{
+	font-size:30px;
+	width:100px;
+}
+
+.small-text{
+	font-size:14px;
+}
+
+.info{
+	margin-left:15px;
+	margin-top:8px;
+	font-size:18px;
+}
+
+.info2{
+	font-size:18px;
+	margin-left:15px;
+}
+
+.in-line{
+	display:flex;
+}
+
+.alert-perso{
+	margin-top:70px;
+	margin-left:120px;
+	margin-right:120px;
+	margin-bottom:-60px;
+}
+
+.alert-search{
+	margin-left:27%;
+	margin-right:27%;
+	margin-top:20px;
+	margin-bottm:-20px;
+}
+
+.center{
+	text-align:center;
+}
+
+.video-label{
+	margin-bottom:15px;
+}
+
+.video-form-container{
+	margin-top:10%;
+	
 }
 

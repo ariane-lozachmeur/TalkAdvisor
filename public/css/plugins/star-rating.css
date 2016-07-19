@@ -13,13 +13,14 @@
     height: 25px;
     font-size: 0;
     color: #fff;
-    background: transparent url('../images/loading.gif') top left no-repeat;
+    background: transparent url('../../images/loading.gif') top left no-repeat;
     border: none;
 }
 
 /*
  * Stars
  */
+ 
 .rating-container .rating {
     cursor: default;
     position: relative;
