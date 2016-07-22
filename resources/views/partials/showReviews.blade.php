@@ -1,22 +1,37 @@
 
 <div class="col-md-12" id="reviews">
 	<?php $i=0; ?>
-	@foreach ($commentReviews as $review)
+	@foreach ($reviews as $review)
+
 	<div class="row review-container">
-		<div class="col-sm-2 review-picture">
+		<div class="col-sm-2 hidden-xs review-picture">
 			<!-- photo of the user -->
-			<img class="img-responsive img-circle"
-				src="https://a2.muscache.com/im/pictures/775bef1f-405a-4dfc-8bef-2f0edf427610.jpg?aki_policy=profile_x_medium"
-				alt="user" style="width: 50%">
-			<p class="user-name">{{ $review->user_id }}</p>
+			<a href='/laravel5/public/user/{{$users["$i"]->id}}'>
+			<img class="img-responsive img-circle" style="width:80%"
+				src="/laravel5/public/images/default.png"
+				alt="user">
+			</a>
 		</div>
 		<div class="col-sm-7 review-text">
-			<span class="review-comment"> <input id=<?php echo "overallStar$i"?>
-				class="kv-ltr-theme-svg-star-overall rating-loading " value="2"> {{
-				$review->comment }} <a class="more" data-toggle="modal"
-				data-target="#modalReview" data-review=<?php echo $i ?>>Read more</a>
-			</span> <span class="review-date">
-				{{$review->created_at->diffForHumans()}} </span>
+			<span class="review-comment">
+			@if ($page==='home')
+			<h4 class="media-heading">Comment of {{$users["$i"]->name}} on {{$speakers["$i"]->speaker_name}}</h4>
+			@else @if ($page==='speaker')
+			<h4 class="media-heading">Comment of {{$users["$i"]->name}}</h4>
+			@else
+			<h4 class="media-heading">Comment on {{$speakers["$i"]->speaker_name}}</h4>
+			@endif
+			@endif
+			
+				<input id=<?php echo "overallStar$i"?> 
+						class="kv-ltr-theme-svg-star-overall rating-loading" value="2"> 
+				<p style="display:inline">{{$review->comment}}</p> 
+				<a class="more" data-toggle="modal" data-target="#modalReview" 
+					data-review=<?php echo $i ?>>Read more</a>
+			</span> 
+			<span class="review-date">
+				{{$review->created_at->diffForHumans()}} 
+			</span>
 		</div>
 		<div class="col-sm-3 review-button">
 			<button class="btn btn-default" data-toggle="modal"
@@ -29,7 +44,7 @@
 
 <!-- If we are not in the homepage, we use pagination -->
 @if ($page != 'home')
-<div style="text-align:center"> {!! $commentReviews->render() !!} </div>
+<div style="text-align:center"> {!! $reviews->render() !!} </div>
 @endif
 
 <!-- Modal for "Read more of the review" -->

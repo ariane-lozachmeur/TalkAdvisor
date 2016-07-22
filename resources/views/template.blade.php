@@ -6,12 +6,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>@yield('title')</title> 
 
- {{ Html::style('css/bootstrap.min.css') }}
+ {{ Html::style('css/plugins/bootstrap/bootstrap.min.css') }}
  {{ Html::style('css/navbar.css') }}
  {{ Html::style('css/style.css') }} 
  {{ Html::style('css/plugins/star-rating.css') }} 
- {{ Html::style('css/plugins/theme-krajee-svg.css') }} 
-
+ {{ Html::style('css/plugins/theme-krajee-svg.css') }}
+ {{Html::style('css/login-register.css')}}
+ {{Html::style('css/plugins/bootstrap-social.css')}}
+ {{Html::style('css/plugins/font-awesome.min.css')}}
+  {{Html::style('css/button.css')}}
+ 
+  
  @yield('header')
  
  </head>
@@ -20,9 +25,14 @@
 
 	@include('partials.navbar')
 	
+	@include('auth.login')	
+	@include('auth.register')
+	
 	@yield('homePagePhoto')
 	
-	@include('partials.flashMessage')
+	@unless($page=='home')
+		@include('partials.flashMessage')
+	@endunless
 
 	@yield('content')
 	
@@ -34,11 +44,12 @@
 	{{ Html::script('js/plugins/typeahead.bundle.min.js') }}
 	{{ Html::script('js/plugins/star-rating.min.js') }}
 	{{ Html::script('js/plugins/jquery.dotdotdot.min.js')}}
-	{{ Html::script('js/plugins/moment.js') }}
 	{{ Html::script('js/plugins/jquery.infinitescroll.min.js')}}
+	{{ Html::script('js/register.blade.js') }} 
+	
 	
 	<script>
-		$('div.alert').not('.alert-important').delay(2000).slideUp(300);
+		$('div.alert').not('.alert-important').delay(2000).fadeOut(300);
 	</script>
 	
 	@yield('script')

@@ -1,7 +1,7 @@
-@if ($page == 'home')
+@if ($page=='home')
 
 <nav class="navbar navbar-home navbar-fixed-top" id="navbar">
-	<div class="container-fluid no-max-width">
+	<div class="container-fluid">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed"
 				data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
@@ -10,25 +10,25 @@
 					class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="../laravel5/public/">TalkAdvisor</a>
+			<a class="navbar-brand" href="../public/">TalkAdvisor</a>
 		</div>
 
 		<div class="collapse navbar-collapse navbar-right"
 			id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				<li><a href="auth/login">Login</a></li>
-				<li><a href="auth/register">Register</a></li>
+				<li><a data-toggle="modal" data-target="#login">Login</a></li>
+				<li><a data-toggle="modal" data-target="#register">Register</a></li>
 
 			</ul>
 		</div>
 
 	</div>
 </nav>
-
+       
 @else
 
 <nav class="navbar navbar-default navbar-fixed-top">
-	<div class="container-fluid">
+	<div class="container">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed"
 				data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"

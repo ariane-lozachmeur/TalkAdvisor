@@ -8,6 +8,7 @@ use App\Speaker;
 use App\ratingoptions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SpeakerFormRequest;
+use App\User;
 
 class SpeakerController extends Controller
 {
@@ -37,16 +38,13 @@ class SpeakerController extends Controller
 		
 		$data=[];
 		$data['speaker'] = $speakerController->getSpeaker($id);
-		$commentReviews = $reviewController->getCommentOn($id);
-		$ratings=[];
-		$i=0;
-		foreach ($commentReviews as $review){
-			$ratings["$i"]=$ratingController->getRatings($review->id);
-			$i++;
-		}			
-		$data['commentReviews'] = $commentReviews;
+		
+		$commentReviews = $reviewController->getCommentsOn($id);
+		$data['reviews'] = $commentReviews['reviews'];
+		$data['users'] = $commentReviews['users'];
+		$data['ratings']=$commentReviews['ratings'];
+		
 		$data['quotes'] = $reviewController->getQuoteOf($id);
-		$data['ratings']=$ratings;
 		$data['options'] = ratingoptions::all();
 		$data['page']= 'speaker';
 		return $data;

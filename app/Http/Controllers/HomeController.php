@@ -33,19 +33,16 @@ class HomeController extends Controller
 		
 		$data['bestspeakers']=$speakerController->getBest(6);
 		$commentReviews= $reviewController->getLastComments(3);
-		$i=0;
-		$ratings=[];
-		foreach ($commentReviews as $review){
-			$ratings["$i"]=$ratingController->getRatings($review->id);
-			$i++;
-		}
-		$data['speakers']=$speakerController->index();
-		$data['commentReviews']=$commentReviews;
-		$data['ratings']=$ratings;
+		
+		$data['reviews']=$commentReviews['reviews'];
+		$data['ratings']=$commentReviews['ratings'];
+		$data['users']=$commentReviews['users'];
+		$data['speakers']=$commentReviews['speakers'];
+		
 		$data['options'] = ratingoptions::all();
 		$data['quotes'] = $reviewController->getRandomQuotes(3);
 		$data['page']= 'home';
 		
-		return view('homepage',$data);
+		return $data;
     }
 }

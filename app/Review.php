@@ -11,6 +11,9 @@ class Review extends Model{
 	protected $fillable =[
 		'comment',
 		'quote',
+		'talk_id',
+		'user_id',
+		'speaker_id',
 	];
 	
 	public function speaker(){

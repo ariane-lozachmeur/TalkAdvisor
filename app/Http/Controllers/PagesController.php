@@ -19,10 +19,11 @@ class PagesController extends Controller
 
 	public function home(){
 		$homeController = new HomeController();
-		return $homeController->index();
+		$data = $homeController->index();
+		return view('homepage',$data);
 	}
 	
-	 public function getPage($type){
+	 public function getPage($type1){
 		/*if ($type == 'review'){
 			$controller = new ReviewController;
 			$reviews = $controller->index();
@@ -47,14 +48,18 @@ class PagesController extends Controller
 		}*/
 	} 
 	
-	public function getPage2($type,$id){
+	public function getPage2($type1,$type2){
 		
-		if ($type=='speaker'){
+		if ($type1=='speaker'){
 			$speakerController = new SpeakerController;
-			$data = $speakerController->show($id);
+			$data = $speakerController->show($type2);
 			return view('speaker',$data);
 		}
-		
+		else if ($type1=='user') {
+			$userController = new UserController();
+			$data = $userController->show($type2);
+			return view('user',$data);
+		}
 		else {
 			return 'Sorry, this page doesn\'t exist';
 		}

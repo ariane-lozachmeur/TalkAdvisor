@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Request;
+use Illuminate\Http\Request;
 use App\Review;
 use App\Ratings;
 use App\Speaker;
@@ -13,16 +13,22 @@ use App\Gestion\ReviewGestion;
 use App\Gestion\ReviewGestionInterface;
 
 class ReviewController extends Controller {
-	protected $reviewRepository;
-	protected $reviewPerPage = 5;
+		
+	 /**
+     * Create a new review instance after a valid registration.
+     *
+     * @param  array  $data
+     * @return Review
+     */
 	
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function create() {
-		return view ( 'partials.ratingForm' );
+	public static function create(array $data){
+		return Review::create([
+				'comment' => $data['comment'],
+				'quote' => $data['quote'],
+				'talk_id' => $data['talk_id'],
+				'speaker_id' => $data['speaker_id'],
+				'user_id' => $data['user_id'],
+				]);
 	}
 	
 	/**
@@ -32,16 +38,15 @@ class ReviewController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request, $speaker_id) {
-		$input = Request::all ();
+		$input = $request->all();
+		
+		// Filling the last informations
+		$input['speaker_id']= $speaker_id;
+		$input['talk_id'] = null; 					//TODO : link talks and reviews
+		$input['user_id']=\Auth::id();
 		
 		// Creating the review
-		$review = new Review ();
-		$review->comment = $input ['comment'];
-		$review->quote = $input ['quote'];
-		$review->talk_id = null; // TODO : To modify when we link talks to reviews
-		$review->speaker_id = $speaker_id;
-		$review->user_id = \Auth::id ();
-		$review->save ();
+		$review = ReviewController::create($input);
 		
 		// We need to know the id of the review we created :
 		$latest = Review::orderBy ( 'id', 'desc' )->first ();
@@ -49,11 +54,11 @@ class ReviewController extends Controller {
 		
 		// Now we can create the rating
 		$ratingController = new RatingsController ();
-		$ratingController->store ( $input, $latest_id );
+		$ratingController->store( $input, $latest_id );
 		
-		// updating the speaker
+		// Updating the speaker
 		$speakerController = new SpeakerController ();
-		$speakerController->update ( $input, $speaker_id );
+		$speakerController->update( $input, $speaker_id );
 		
 		\Session::flash ( 'flash_message', 'Your review has been posted succesfully' );
 		$pagesController = new PagesController ();
@@ -92,9 +97,20 @@ class ReviewController extends Controller {
 	}
 	
 	// extracts the comment of the speaker for the reviews
-	public function getCommentOn($id) {
-		$reviews = Speaker::find ( $id )->reviews ()->where ( 'comment', '!=', "" )->latest ( 'created_at' )->paginate ( 3 );
-		return $reviews;
+	public function getCommentsOn($id) {
+		$ratingController=new RatingsController();
+		
+		$reviews = Speaker::find ($id)->reviews()->where ( 'comment', '!=', "" )->latest ( 'created_at' )->paginate(5);
+		$ratings=[];
+		$users=[];
+		$i=0;
+		foreach ($reviews as $review){
+			$users["$i"] = User::find($review->user_id);
+			$ratings["$i"] = $ratingController->getRatings($review->id);
+			$i++;
+		}
+		
+		return ['reviews'=>$reviews,'ratings'=>$ratings,'users'=>$users];
 	}
 	
 	// extracts the quotes of the speaker from the reviews
@@ -105,8 +121,20 @@ class ReviewController extends Controller {
 	
 	// return the $number last comment on the site
 	public static function getLastComments($n) {
-		$commentReviews = Review::where ( 'comment', '!=', "" )->latest ( 'created_at' )->paginate ( $n );
-		return $commentReviews;
+		$ratingController=new RatingsController();
+		
+		$reviews = Review::where ( 'comment', '!=', "" )->latest ( 'created_at' )->paginate ( $n );
+		$ratings=[];
+		$users=[];
+		$speakers=[];
+		$i=0;
+		foreach ($reviews as $review){
+			$users["$i"] = User::find($review->user_id);
+			$speakers["$i"] = Speaker::find($review->speaker_id);
+			$ratings["$i"] = $ratingController->getRatings($review->id);
+			$i++;
+		}
+		return ['reviews'=>$reviews,'ratings'=>$ratings,'users'=>$users,'speakers'=>$speakers];
 	}
 	
 	// return $n quotes chosen randomly. We turn the result in a plain array to simply the displaying of them

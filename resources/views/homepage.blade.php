@@ -1,10 +1,15 @@
 @extends('template') @section('title') TalkAdvisor @stop
 
-@section('header') {{ Html::style('css/navbar-home.css') }} {{
-Html::style('css/homepage.css') }} @stop @section('homePagePhoto')
+@section('header') 
+{{ Html::style('css/navbar-home.css') }}
+{{ Html::style('css/homepage.css') }}
+@stop
+
+@section('homePagePhoto')
 
 <div class="row">
-	<div class="col-lg-12" id="bg" style="padding-bottom: 100px">
+	<div class="col-lg-12" id="bg">	
+		@include('partials.flashMessage')
 		<h1 class="talkadvisor">TalkAdvisor</h1>
 		<h2 class="subtitle">For better talks</h2>
 		<div id="search-container">
@@ -12,7 +17,7 @@ Html::style('css/homepage.css') }} @stop @section('homePagePhoto')
 			<div id="search">
 			{{Form::open(array('url'=>'search','class'=>'form-home','role'=>'search'))}}
 					<div class="form-group" id="the-basics">
-					{{Form::text('name',null,array('class'=>'form-control-home typeahead','placeholder'=>'Find a speaker'))}}
+					{{Form::text('speaker_name',null,array('class'=>'form-control-home typeahead','placeholder'=>'Find a speaker'))}}
 					</div>
 					<button type="submit" class="button-perso" style="border: 0; background: transparent">
 						<img src="http://localhost/laravel5/public/images/loupe.png"
@@ -33,6 +38,7 @@ Html::style('css/homepage.css') }} @stop @section('homePagePhoto')
 	</div>
 </div>
 @stop
+
 @section('content')
 <div class="container-fluid">
 	<div class="margin">
@@ -41,15 +47,15 @@ Html::style('css/homepage.css') }} @stop @section('homePagePhoto')
 			{{-- */$i=0;/* --}} <!-- This is juste a way to use the variable $i without printing it -->
 			@foreach ($bestspeakers as $speaker)
 			{{-- */$i++;/* --}}
-			<div class="col-md-2 col-sm-3" id="speaker{{$i}}">
+			<div class="col-md-2 col-sm-2 col-xs-2" id="speaker{{$i}}">
 				<div class="review-picture">
 					<!-- photo of the user -->
-					<img class="img-responsive img-circle"
-						src="{{$speaker->speaker_photo}}" alt="speaker"> <a
-						class="user-name" href="speaker/{{$speaker->id}}">{{
-						$speaker->speaker_name }}</a> <input
-						class="kv-ltr-theme-svg-star-overall rating-loading "
-						value="{{$speaker->average_1}}">
+					<a  href="speaker/{{$speaker->id}}"><img class="img-responsive img-circle"
+						src="{{$speaker->speaker_photo}}" alt="speaker"></a> 
+					<a class="user-name" href="speaker/{{$speaker->id}}">
+						{{$speaker->speaker_name }}
+					</a> 
+					<input class="kv-ltr-theme-svg-star-overall rating-loading " value="{{$speaker->average_1}}">
 				</div>
 			</div>
 			@endforeach
@@ -71,10 +77,11 @@ Html::style('css/homepage.css') }} @stop @section('homePagePhoto')
 
 <script>
 
-var commentReviews = {!!json_encode($commentReviews)!!};
+var reviews = {!!json_encode($reviews)!!};
 var ratings= {!! json_encode($ratings) !!};
 var quotes = {!!json_encode($quotes)!!};
 var speakers = {!!json_encode($speakers)!!};
+var users = {!!json_encode($users)!!};
 
 $(window).scroll(function() {
     var height = $(window).scrollTop();
@@ -91,17 +98,16 @@ $(window).scroll(function() {
    
 }); 
 
-if(screen.width<1100){
-	$("#speaker5").hide();
-	$("#speaker6").hide();
-	
-}
+$(function () {
+    $(".user-name").dotdotdot({
+        watch:'window',
+    });
+});
 
 </script>
 
-{{Html::script('js/read_more.js')}}
-{{Html::script('js/stars.js')}}
-{{ Html::script('js/autocompletion.js') }} 
+{{Html::script('js/showReviews.js')}}
+{{Html::script('js/autocompletion.js')}}
 
 
 @stop

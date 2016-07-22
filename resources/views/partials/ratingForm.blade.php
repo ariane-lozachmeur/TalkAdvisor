@@ -18,14 +18,14 @@
 								</div>
 								<input id="input{{$option->id}}" class="kv-ltr-theme-svg-star rating-loading " value="2">
 								<!-- Only contains the grade but is never showed -->
-								{!! Form::number( $option->id ,2,array('id'=> $option->id, 'style'=>'display:none')); !!}
+								{!! Form::number( $option->id ,2,array('id'=> $option->id, 'class'=>'hidden', 'step'=>'any')); !!}
 							</div>
 						@endforeach
 						<div class="btn btn-primary right-align", id="grades">Save grades</div>
 					</div>
 				</div>
 	    <!-- Contains the second part of the notation. It is showed when the button "Save grades" in clicked -->
-				<div class="row" id="text-fields" style="display: none">
+				<div class="row" id="text-fields" style="display:none">
 					<div class="col-lg-10 col-lg-offset-1 form-group">
 						<span>Comment and quote are optional, if you don't wish to leave a comment and/or a quote, juste click on submit.</span></br>
 					{!! Form::label('comment', 'Your comment :') !!} 

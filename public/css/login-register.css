@@ -1,0 +1,48 @@
+@CHARSET "ISO-8859-1";
+
+.header-perso{
+	border-radius: 10px;
+	background-color: #f5f5f5;
+}
+
+.footer-perso{
+	border-radius: 6px;
+	background-color: #f5f5f5;
+	display:flex;
+	justify-content:space-between;
+	align-items:center;
+}
+
+.register-or{
+	margin-left:-30px;
+	font-size:18px;
+	font-weight:bold;
+}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+#btn-facebook{
+	margin:20px;
+}
+
+#btn-email{
+	margin:20px 20px 0px 20px;	
+}
